@@ -1,6 +1,6 @@
-/AdventOfCode 2020/personal.py
-/AdventOfCode 2020/data/
-/AdventOfCode 2020/.ipynb_checkpoints/
+*/personal.py
+*/data/
+*/.ipynb_checkpoints/
 /test.py
 /.idea/
 /__pycache__/

@@ -4,7 +4,7 @@ from typing import Union, Optional
 
 class Summon:
     @staticmethod
-    def how_sum(target: int, lst: list[int], memory: Optional[dict] = None) -> Optional[list[int]]:
+    def how_sum(target: int, lst: list, memory: Optional[dict] = None) -> Optional[list]:
         """ finds a combination of elements that, when summoned, is equal to the target.
 
         Create and optimized by Alexandre Dewilde.
@@ -35,8 +35,7 @@ class Summon:
         memory[target] = None
 
     @staticmethod
-    def sum2(target: int, lst: list[int], first_only: bool = True, multiple: bool = True, reverted: bool = False) -> Union[
-        tuple[int, int], None, set[tuple[int, int]]]:
+    def sum2(target: int, lst: list, first_only: bool = True, multiple: bool = True, reverted: bool = False) -> Union[tuple, None, set]:
         """ Finds the pair(s) of additive elements that give the target.
 
         Based on Alexandre Dewilde version.

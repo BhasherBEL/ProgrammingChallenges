@@ -58,7 +58,7 @@ class Number:
         return True
 
     @staticmethod
-    def primes_before(n: int, method: Callable = is_prime) -> list[int]:
+    def primes_before(n: int, method: Callable = is_prime) -> list:
         """ Find all prime numbers between 0 and n.
 
         Args:
