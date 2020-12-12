@@ -1,8 +1,7 @@
-*/personal.py
-*/data/
-*/.ipynb_checkpoints/
+personal.py
+data/
+.ipynb_checkpoints/
 /test.py
-/.idea/
-/__pycache__/
-*/.idea/
-*/__pycache__/
+.idea/
+.vscode/
+__pycache__/
