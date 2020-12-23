@@ -28,3 +28,8 @@ class Iter:
     @staticmethod
     def multirange(*args, depth=1, **kwargs):
         pass
+
+    @staticmethod
+    def multimove(data: list, size: int) -> list:
+        for i in range(len(data)-size+1):
+            yield data[i:i+size]
