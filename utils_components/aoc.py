@@ -20,7 +20,7 @@ class AOC(object):
         self.data_dir = data_dir
         self.file_format = file_format
         self.cookies = {'session': session}
-        self.brut = ''
+        self.raw = ''
         self.data = ''
         self.monoline_mode = None
         self.numeric_mode = 'auto'
@@ -43,7 +43,7 @@ class AOC(object):
         if not force and os.path.exists(path):
             print('Local file found.')
             with open(path, 'r') as file:
-                self.brut = file.read()
+                self.raw = file.read()
         else:
             url = self.get_input_url(**kwargs)
             req = requests.get(url, cookies=self.cookies)
@@ -59,7 +59,7 @@ class AOC(object):
                     with open(path, 'w') as file:
                         file.write(content)
                     print('Data correctly downloaded and saved locally for next usage.')
-                    self.brut = content
+                    self.raw = content
                 else:
                     print('Error when trying to download data from', url, ': found file is empty.')
         return self
@@ -68,25 +68,25 @@ class AOC(object):
         return self.get_file(force=force, year=self.today.year, day=self.today.day)
 
     def analyse(self):
-        if self.brut:
+        if self.raw:
             if self.numeric_mode == 'auto':
-                ratio = len(re.findall('\d', self.brut)) / (len(re.findall('[a-zA-Z0-9]', self.brut)) + 0.01)
+                ratio = len(re.findall('\d', self.raw)) / (len(re.findall('[a-zA-Z0-9]', self.raw)) + 0.01)
                 self.numeric_mode = ratio >= 0.95
                 print(
                     f'{round(ratio * 100)}% of data are digits. Analyse as {"numbers" if self.numeric_mode else "text"}.')
 
-            empty_line_amount = self.brut.count('\n\n')
+            empty_line_amount = self.raw.count('\n\n')
             self.monoline_mode = empty_line_amount <= 2
             print(f'{empty_line_amount} empty line(s) found. Analyse as {"monline" if self.monoline_mode else "multiline"} data.')
 
             if self.monoline_mode:
-                stripped = map(lambda x: x.strip(), self.brut.strip().split('\n'))
+                stripped = map(lambda x: x.strip(), self.raw.strip().split('\n'))
                 if self.numeric_mode:
                     self.data = [int(x) for x in stripped if is_digit(x)]
                 else:
                     self.data = [line for line in stripped if line]
             else:
-                stripped = map(lambda x: x.strip(), self.brut.strip().split('\n\n'))
+                stripped = map(lambda x: x.strip(), self.raw.strip().split('\n\n'))
                 if self.numeric_mode:
                     self.data = [list(map(int, filter(lambda y: y.isdigit(), x))) for x in stripped]
                 else:
