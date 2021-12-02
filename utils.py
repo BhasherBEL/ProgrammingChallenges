@@ -6,3 +6,8 @@ from utils_components.summon import Summon
 from utils_components.palindrome import Palindrome
 from utils_components.iter import Iter
 from utils_components.custom import Custom
+from utils_components.aoc import AOC
+
+
+class Utils(Frequency, Number, Parse, Set, Summon, Palindrome, Iter, Custom):
+    pass

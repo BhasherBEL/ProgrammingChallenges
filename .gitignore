@@ -1,4 +1,5 @@
 personal.py
+session.py
 data/
 .ipynb_checkpoints/
 /test.py
