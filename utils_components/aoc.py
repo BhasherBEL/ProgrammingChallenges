@@ -67,6 +67,7 @@ class AOC(object):
     def get_today_file(self, force=False):
         return self.get_file(force=force, year=self.today.year, day=self.today.day)
 
+    # TODO Customise here
     def analyse(self):
         if self.raw:
             if self.numeric_mode == 'auto':
