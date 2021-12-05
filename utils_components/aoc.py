@@ -68,7 +68,11 @@ class AOC(object):
         return self.get_file(force=force, year=self.today.year, day=self.today.day)
 
     # TODO Customise here
-    def analyse(self):
+    def analyse(self, numeric_mode=None, monoline_mode=None):
+        if numeric_mode is None:
+            numeric_mode = self.numeric_mode
+        if monoline_mode is None:
+            monoline_mode = self.monoline_mode
         if self.raw:
             if self.numeric_mode == 'auto':
                 ratio = len(re.findall('\d', self.raw)) / (len(re.findall('[a-zA-Z0-9]', self.raw)) + 0.01)
