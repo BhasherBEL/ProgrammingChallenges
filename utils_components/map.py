@@ -1,5 +1,6 @@
 from __future__ import annotations
 from enum import Enum
+import numpy as np
 
 
 class Map:
@@ -77,4 +78,18 @@ class Map:
             abs(t1[0]-t2[0]),
             abs(t1[0]-t2[0]+dimensions[0][1]-dimensions[0][0]),
             abs(t1[0]-t2[0]+dimensions[0][0]-dimensions[0][1]),
-        ) + Map.cycle_distance(t1[1:], t2[1:], dimensions[1:])
+        ) + Map.cycle_coordinates_distance(t1[1:], t2[1:], dimensions[1:])
+
+    @staticmethod
+    def path(t1, t2):
+        p1 = np.array(t1)
+        p2 = np.array(t2)
+
+        step = (p2-p1)/max(abs(p2-p1))
+
+        steps = []
+        for i in range(max(abs(p2-p1))+1):
+            cs = p1 + 0.5 + i*step
+            steps.append([int(el) for el in cs])
+
+        return np.array(steps)

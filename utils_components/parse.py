@@ -40,3 +40,8 @@ class Parse:
                 if strict:
                     yield
                 yield data
+
+    @staticmethod
+    def iter_parse(data, f=int):
+        for el in data:
+            yield f(el)
