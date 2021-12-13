@@ -81,9 +81,10 @@ class AOC(object):
                 print(f'{round(ratio * 100)}% of data are digits. Analyse as '
                       f'{"numbers" if numeric else "text"}.')
 
-            empty_line_amount = self.raw.count('\n\n')
-            monoline = empty_line_amount <= 2
-            print(f'{empty_line_amount} empty line(s) found. Analyse as {"monline" if monoline else "multiline"} data.')
+            if monoline is None:
+                empty_line_amount = self.raw.count('\n\n')
+                monoline = empty_line_amount <= 2
+                print(f'{empty_line_amount} empty line(s) found. Analyse as {"monline" if monoline else "multiline"} data.')
 
         if self.numeric_mode == 'auto' or self.numeric_mode is None:
             self.numeric_mode = numeric
