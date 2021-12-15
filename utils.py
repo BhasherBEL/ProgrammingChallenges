@@ -9,7 +9,8 @@ from utils_components.custom import Custom
 from utils_components.aoc2 import AOC
 from utils_components.string import String
 from utils_components.map import Map
+from utils_components.graph import Graph
 
 
-class Utils(Frequency, Number, Parse, Set, Summon, Palindrome, Iter, Custom, String, Map):
+class Utils(Frequency, Number, Parse, Set, Summon, Palindrome, Iter, Custom, String, Map, Graph):
     pass
