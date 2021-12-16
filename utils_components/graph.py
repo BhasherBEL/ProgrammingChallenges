@@ -1,5 +1,6 @@
 import sortedcontainers
-from collections import defaultdict
+from collections import defaultdict, deque
+import random
 
 
 class Graph:
@@ -37,3 +38,51 @@ class Graph:
 
                         open_set.setdefault(estimation, list())
                         open_set[estimation].append(neighbour)
+
+    @staticmethod
+    def bfs_path(root, goal, get_neighbours):
+        que = deque()
+        que.append([root])
+        explored = {root}
+
+        while que:
+            v = que.popleft()
+            if v[-1] == goal:
+                return v
+
+            for edge in get_neighbours(v[-1]):
+                if edge not in explored:
+                    que.append(v + [edge])
+                    explored.add(edge)
+
+    @staticmethod
+    def dfs_path(root, goal, get_neighbours):
+        que = deque()
+        que.append([root])
+        explored = {root}
+
+        while que:
+            v = que.pop()
+            if v[-1] == goal:
+                return v
+
+            for edge in get_neighbours(v[-1]):
+                if edge not in explored:
+                    que.append(v + [edge])
+                    explored.add(edge)
+
+    @staticmethod
+    def dbfs_path(root, goal, get_neighbours):
+        que = deque()
+        que.append([root])
+        explored = {root}
+
+        while que:
+            v = que.popleft() if random.random() > 0.5 else que.pop()
+            if v[-1] == goal:
+                return v
+
+            for edge in get_neighbours(v[-1]):
+                if edge not in explored:
+                    que.append(v + [edge])
+                    explored.add(edge)
