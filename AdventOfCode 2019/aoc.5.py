@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath("../"))
 sys.path.append(os.path.abspath("../AdventOfCode 2020/"))
 from utils import *
 from aoc import *
-from personal import SESSION
+from session import SESSION
 from datetime import datetime
 import numpy as np
 
