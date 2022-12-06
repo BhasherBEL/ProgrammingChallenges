@@ -68,6 +68,9 @@ class AOC(object):
     def get_today_file(self, force=False):
         return self.get_file(force=force, year=self.today.year, day=self.today.day)
 
+    def get_today_file_at_time(self):
+        pass
+
     # TODO Customise here
     def analyse(self, numeric=None, monoline=None):
         if numeric is None:
