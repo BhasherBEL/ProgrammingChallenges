@@ -1,6 +1,7 @@
 personal.py
 session.py
 data/
+experiment/
 .ipynb_checkpoints/
 /test.py
 .idea/

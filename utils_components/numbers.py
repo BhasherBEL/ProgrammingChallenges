@@ -82,6 +82,17 @@ class Number:
             primes.insert(0, 2)
 
         return primes
+    
+    @staticmethod
+    def product(*args) -> int:
+        """ Calculate multiplication of all numbers"""
+        res = 1
+        for arg in args:
+            if hasattr(arg, '__iter__'):
+                res *= Number.product(*arg)
+            else:
+                res *= arg
+        return res
 
     @staticmethod
     def gcd(*args, **kwargs) -> int:
