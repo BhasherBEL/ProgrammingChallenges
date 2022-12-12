@@ -135,7 +135,7 @@ class AOC(object):
 
     def head(self, amount=5):
         insert = f'{min(amount, len(self.data))}/{len(self.data)}'
-        print(f'===== HEAD ({insert}) =====')
+        print(f'===== head ({insert}) =====')
         for i, el in enumerate(self.data):
             print(el)
             if i == amount - 1:
@@ -155,11 +155,3 @@ class AOC(object):
         if display:
             print(f'sum: {res!s}')
         return res
-
-
-def is_digit(x):
-    try:
-        int(x)
-        return True
-    except ValueError:
-        return False
