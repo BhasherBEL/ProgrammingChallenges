@@ -2,8 +2,26 @@ import numpy as np
 
 from arrays import FixedSortedKeys
 
-class KDTree:
+class BinaryTree(object):
+    def __init__(self, key=None, value=None, left=None, right=None, name=None) -> None:
+        self.key = key
+        self.value = value
+        self.left = left
+        self.right = right
+        self.name = self.__class__.__name__ if name is None else name
 
+    def __repr__(self) -> str:
+        res = f"{self.name}(key={self.key}"
+        if self.value:
+            res += f", value={self.value}"
+        if self.left is not None:
+            res += f", left={self.left}"
+        if self.right is not None:
+            res += f", right={self.right}"
+        return res + ')'
+
+
+class KDTree(BinaryTree):
     visited = []
 
     @staticmethod
@@ -26,89 +44,102 @@ class KDTree:
         return tree
     
     def __init__(self, coords, dim, parent=None, right=None, left=None):
-        self.coords = coords
+        super().__init__(coords, None, left, right)
         self.dim = dim
         self.parent = parent
-        self.right = right
-        self.left = left
         
-    def search(self, other, k=1):
+    def knn(self, other, k=1):
         fsa = FixedSortedKeys([(np.inf, None)]*k)
-        self.__inner_search(other, fsa)
-        return np.array([el[1].coords for el in fsa.tuples])
+        self.__inner_knn(other, fsa)
+        return np.array([el[1].key for el in fsa.tuples])
 
-    def __inner_search(self, other, fsa: FixedSortedKeys):
-        KDTree.visited.append(self.coords)
+    def __inner_knn(self, other, fsa: FixedSortedKeys):
+        KDTree.visited.append(self.key)
 
         fsa.insert(self.distance_to_point(other), self)
         
         if self.left is None and self.right is None:
             return
 
-        ddist = self.coords[self.dim] - other[self.dim]
+        ddist = self.key[self.dim] - other[self.dim]
 
         child = self.left if self.right is None or self.left is not None and ddist <= 0 else self.right
         ochild = self.right if child is self.left else self.left
 
-        child.__inner_search(other, fsa)
+        child.__inner_knn(other, fsa)
 
         if ochild is not None and abs(ddist) < fsa.max()[0]:
-            ochild.__inner_search(other, fsa)
+            ochild.__inner_knn(other, fsa)
 
         return
 
         # if self.left is None and self.right is None:
         #     return self, self.distance_to_point(other)
 
-        # ddist = self.coords[self.dim] - other[self.dim]
+        # ddist = self.key[self.dim] - other[self.dim]
 
         # child = self.left if self.right is None or self.left is not None and ddist <= 0 else self.right
         # ochild = self.right if child is self.left else self.left
 
-        # bc, bd = child.__inner_search(other)
+        # bc, bd = child.__inner_knn(other)
         
         # if (mdist := self.distance_to_point(other)) < bd:
         #     bc, bd = self, mdist
         
         # if ochild is not None and abs(ddist) < bd:
-        #     oc, od = ochild.__inner_search(other)
+        #     oc, od = ochild.__inner_knn(other)
         #     if od < bd:
         #         bc, bd = oc, od
 
     def distance(self, other):
-        return self.distance_to_point(other.coords)
+        return self.distance_to_point(other.key)
 
-    def distance_to_point(self, coords):
-        return self.__distanc_btw(self.coords, coords)
+    def distance_to_point(self, other):
+        return self.__distanc_btw(self.key, other)
 
     @staticmethod
     def __distanc_btw(c1, c2):
-        return sum([(a-b)**2 for a, b in zip(c1, c2)])**0.5
+        return sum([(a-b)**2 for a, b in zip(c1, c2)])**0.5 
+    
+class SegmentTree(BinaryTree):
+    @staticmethod
+    def new(data, start=0, end=None, fct=lambda a,b: a+b):
+        if end is None:
+            end = len(data)-1
 
+        tree = SegmentTree(
+            from_=start,
+            to=end,
+            left=SegmentTree.new(data, start, (start+end)//2, fct) if start != end else None,
+            right=SegmentTree.new(data, (start+end)//2+1, end, fct) if start != end else None,
+            fct=fct
+        ) 
+
+        if start == end:
+            tree.value = data[start]
+        else:
+            tree.value = fct(tree.left.value, tree.right.value)
+        
+        return tree
+        
+
+    def __init__(self, from_, to, value=None, left=None, right=None, fct=None) -> None:
+        super().__init__(key=(from_, to), value=value, left=left, right=right)
+        self.fct = fct
+
+    def get(self, i, j):
+        if i == self.key[0] and j == self.key[1]:
+            return self.value
+        
+        if i >= self.right.key[0]:
+            return self.right.get(i, j)
+        if j <= self.left.key[1]:
+            return self.left.get(i, j)
+        
+        return self.fct(self.left.get(i, self.left.key[1]), self.right.get(self.right.key[0], j))
+            
 
 if __name__ == "__main__":
-    import numpy as np
-    from matplotlib import pyplot as plt
+    tree = SegmentTree.new([2, 3, -1, 5, -2, 4, 8, 10], fct=min)
 
-    n = 1023
-    k = 1
-    min_ = 0
-    max_ = 1000
-    data = np.random.randint(min_, max_, [n, k])
-    new = np.random.randint(min_, max_, k)
-
-    tree = KDTree.new(data)
-
-    nearest = tree.search(new, 10)
-
-    print(new)
-    print(nearest)
-
-    # plt.figure(figsize=(10, 10))
-    # plt.scatter(*data.T)
-    # plt.scatter(*new.T, color='red')
-    # plt.scatter(*np.array(KDTree.visited).T, color='cyan')
-    # plt.scatter(*nearest.T, color='orange')
-    # plt.ylim(min_, max_)
-    # plt.xlim(min_, max_)
-    # plt.show()
+    print(tree.get(0, 6))
