@@ -90,6 +90,8 @@ class KDTree(BinaryTree):
         #     oc, od = ochild.__inner_knn(other)
         #     if od < bd:
         #         bc, bd = oc, od
+        
+        # return bc, bd
 
     def distance(self, other):
         return self.distance_to_point(other.key)
@@ -103,7 +105,7 @@ class KDTree(BinaryTree):
     
 class SegmentTree(BinaryTree):
     @staticmethod
-    def new(data, start=0, end=None, fct=lambda a,b: a+b):
+    def new(data, fct, start=0, end=None):
         if end is None:
             end = len(data)-1
 
@@ -142,4 +144,6 @@ class SegmentTree(BinaryTree):
 if __name__ == "__main__":
     tree = SegmentTree.new([2, 3, -1, 5, -2, 4, 8, 10], fct=min)
 
+    print([2, 3, -1, 5, -2, 4, 8, 10])
+    print(tree)
     print(tree.get(0, 6))
